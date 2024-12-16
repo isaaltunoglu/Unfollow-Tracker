@@ -25,7 +25,7 @@ class Instagram:
         username_input.send_keys(self.username)
         password_input.send_keys(self.password)
         password_input.send_keys(Keys.ENTER)
-        time.sleep(20)
+        time.sleep(30)
 
     def getFollowers(self):
         # Profil sayfasına git
@@ -105,21 +105,22 @@ class Instagram:
         
 
     def getUnfallowers(self):
-        i = 0
-        while i < len(self.followers):
-            try:
-                if self.followers[i] in self.follows:
-                    i += 1
-                else:
-                    self.unfollowers.append(self.followers[i])
-                    i += 1
-            except Exception as e :
-                print(f"Hata: {e}")
-                break
-        for i in self.unfollowers:
-            print(f"unfollower: {i}")
-    
+    # self.followers'u bir set'e çevirerek aramayı hızlandır
+        followers_set = set(self.followers)
 
+        # Tüm takip ettiklerini kontrol et
+        for follow in self.follows:
+            try:
+                if follow not in followers_set:  # Eğer takip ettiğin kişi seni takip etmiyorsa
+                    self.unfollowers.append(follow)
+            except Exception as e:
+                print(f"Hata: {e}")
+                # Hata durumunda devam et
+                continue
+
+        # Sonuçları yazdır
+        for unfollower in self.unfollowers:
+            print(f"unfollower: {unfollower}")
 
 
 # Instagram sınıfını çalıştır
